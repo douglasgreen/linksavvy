@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LinkSavvy;
 
 use Exception;
@@ -7,32 +9,37 @@ use PDO;
 
 class Application
 {
-    private $basePath;
+    private readonly string $basePath;
+
     private $baseUrl;
-    private $config;
-    private $pdo;
+
+    private array|bool $config;
+
+    private readonly \PDO $pdo;
+
     private $userId;
-    private $userManager;
+
+    private readonly UserManager $userManager;
 
     public function __construct()
     {
         session_start();
 
-        $this->basePath = dirname(dirname(__FILE__)) . '/';
+        $this->basePath = dirname(__FILE__, 2) . '/';
         $this->baseUrl = $this->getBaseUrl();
 
         $configFilePath = $this->basePath . '/config.ini';
         $this->config = parse_ini_file($configFilePath, true);
 
         $dbConfig = $this->getConfigSection('db');
-        $dbManager = new DatabaseManager($dbConfig);
-        $this->pdo = $dbManager->getConnection();
+        $databaseManager = new DatabaseManager($dbConfig);
+        $this->pdo = $databaseManager->getConnection();
 
         $userConfig = $this->getConfigSection('user');
         $this->userManager = new UserManager($this->pdo, $userConfig);
     }
 
-    public function checkAuthentication()
+    public function checkAuthentication(): void
     {
         if (isset($_SESSION['userId'])) {
             $this->userId = $_SESSION['userId'];
@@ -42,7 +49,7 @@ class Application
         }
     }
 
-    public function checkAuthenticationAndRedirect()
+    public function checkAuthenticationAndRedirect(): void
     {
         if (isset($_SESSION['userId'])) {
             $this->userId = $_SESSION['userId'];
@@ -53,7 +60,8 @@ class Application
         }
     }
 
-    public function getBaseUrl() {
+    public function getBaseUrl()
+    {
         $serverName = $_SERVER['SERVER_NAME'];
         $requestUri = $_SERVER['REQUEST_URI'];
 
@@ -61,22 +69,23 @@ class Application
 
         // Find the position of the program name in the URL.
         $progDir = basename($this->basePath);
-        $prognamePosition = strpos($requestUri, $progDir);
+        $prognamePosition = strpos((string) $requestUri, $progDir);
 
         // If program name is found, get the base path.
         if ($prognamePosition !== false) {
-            $baseURL = substr($requestUri, 0, $prognamePosition) . $progDir . '/public/';
+            $baseURL = substr((string) $requestUri, 0, $prognamePosition) . $progDir . '/public/';
             return 'https://' . $serverName . $baseURL;
-        } else {
-            throw new Exception("Base URL not found");
         }
+
+        throw new Exception('Base URL not found');
     }
 
     public function getConfigSection(string $section): array
     {
-        if (!isset($this->config[$section])) {
-            throw new Exception("Section not found");
+        if (! isset($this->config[$section])) {
+            throw new Exception('Section not found');
         }
+
         return $this->config[$section];
     }
 

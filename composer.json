@@ -3,27 +3,33 @@
     "description": "A bookmark manager",
     "license": "MIT",
     "autoload": {
+        "files": [
+            "src/Exceptions.php"
+        ],
         "psr-4": {
-            "LinkSavvy\\": "src/"
+            "DouglasGreen\\LinkSavvy\\": "src/"
         }
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/douglasgreen/pagemaker.git"
-        }
-    ],
     "require": {
-        "php": ">=7.3.0",
-        "douglasgreen/pagemaker": "dev-main"
+        "php": ">=8.1"
     },
     "require-dev": {
-        "phpmd/phpmd": "^2.13",
-        "squizlabs/php_codesniffer": "^3.7"
+        "phpmd/phpmd": "^2.15",
+        "phpstan/phpstan": "^1.10",
+        "rector/rector": "^1.0",
+        "symplify/easy-coding-standard": "^12.2"
     },
     "scripts": {
-        "fix-js": "npm run fix && npm run format && npx prettier --write .",
-        "fix-php": "./vendor/bin/phpcbf",
-        "lint-php": "./vendor/bin/phpcs && ./vendor/bin/phpmd bin,src text phpmd.xml"
+        "lint": [
+            "ecs",
+            "rector --dry-run",
+            "./run_phpmd.sh",
+            "./run_phpstan.sh"
+        ],
+        "lint:fix": [
+            "ecs --fix",
+            "rector"
+        ]
     }
+
 }

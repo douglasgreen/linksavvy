@@ -1,23 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LinkSavvy;
 
 use PDO;
 
 class UrlManager
 {
-    /**
-     * @var PDO
-     */
-    private $pdo;
+    public function __construct(
+        private readonly PDO $pdo
+    ) {}
 
-    public function __construct(PDO $pdo)
-    {
-        $this->pdo = $pdo;
-    }
-
-    public function create(int $folderId, string $originalUrl, string $urlTitle, string $urlDescription, int $domainId)
-    {
+    public function create(
+        int $folderId,
+        string $originalUrl,
+        string $urlTitle,
+        string $urlDescription,
+        int $domainId
+    ): string|false {
         $sql = <<<SQL
             INSERT INTO
                 Urls (
@@ -42,23 +43,27 @@ class UrlManager
             ':originalUrl' => $originalUrl,
             ':urlTitle' => $urlTitle,
             ':urlDescription' => $urlDescription,
-            ':domainId' => $domainId
+            ':domainId' => $domainId,
         ]);
         return $this->pdo->lastInsertId();
     }
 
     public function delete(int $urlId)
     {
-        $sql = "DELETE FROM Urls WHERE urlId = :urlId";
+        $sql = 'DELETE FROM Urls WHERE urlId = :urlId';
         $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute([':urlId' => $urlId]);
+        return $stmt->execute([
+            ':urlId' => $urlId,
+        ]);
     }
 
     public function read(int $urlId)
     {
-        $sql = "SELECT * FROM Urls WHERE urlId = :urlId";
+        $sql = 'SELECT * FROM Urls WHERE urlId = :urlId';
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':urlId' => $urlId]);
+        $stmt->execute([
+            ':urlId' => $urlId,
+        ]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
@@ -78,7 +83,9 @@ class UrlManager
                 urlTitle
             SQL;
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute([':folderId' => $folderId]);
+        $stmt->execute([
+            ':folderId' => $folderId,
+        ]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -101,7 +108,7 @@ class UrlManager
             ':urlTitle' => $urlTitle,
             ':urlDescription' => $urlDescription,
             ':domainId' => $domainId,
-            ':urlId' => $urlId
+            ':urlId' => $urlId,
         ]);
     }
 }

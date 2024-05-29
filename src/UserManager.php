@@ -1,26 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LinkSavvy;
 
 use PDO;
 
 class UserManager
 {
-    /**
-     * @var PDO
-     */
-    private $pdo;
     private $pepper;
 
-    public function __construct(PDO $pdo, array $config)
-    {
-        $this->pdo = $pdo;
-        $this->pepper = $config["pepper"];
+    public function __construct(
+        private readonly PDO $pdo,
+        array $config
+    ) {
+        $this->pepper = $config['pepper'];
     }
 
     public function login(string $username, string $password): ?int
     {
-        $pwdPeppered = hash_hmac("sha256", $password, $this->pepper);
+        $pwdPeppered = hash_hmac('sha256', $password, (string) $this->pepper);
         $query = <<<SQL
             SELECT
                 userId,
@@ -36,7 +35,7 @@ class UserManager
         if ($stmt->rowCount() > 0) {
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
             $pwdHashed = $user['userPass'];
-            $result = password_verify($pwdPeppered, $pwdHashed);
+            $result = password_verify($pwdPeppered, (string) $pwdHashed);
             if ($result) {
                 return $user['userId'];
             }
@@ -47,7 +46,7 @@ class UserManager
 
     public function register(string $username, string $password): void
     {
-        $pwdPeppered = hash_hmac("sha256", $password, $this->pepper);
+        $pwdPeppered = hash_hmac('sha256', $password, (string) $this->pepper);
         $pwdHashed = password_hash($pwdPeppered, PASSWORD_DEFAULT);
 
         $query = <<<SQL
@@ -60,13 +59,13 @@ class UserManager
         $stmt = $this->pdo->prepare($query);
         $stmt->execute([
             'username' => $username,
-            'userPass' => $pwdHashed
+            'userPass' => $pwdHashed,
         ]);
     }
 
     public function update(string $username, string $password): void
     {
-        $pwdPeppered = hash_hmac("sha256", $password, $this->pepper);
+        $pwdPeppered = hash_hmac('sha256', $password, (string) $this->pepper);
         $pwdHashed = password_hash($pwdPeppered, PASSWORD_DEFAULT);
 
         $query = <<<SQL

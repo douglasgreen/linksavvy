@@ -1,25 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LinkSavvy;
 
-use Exception;
 use PDO;
 
 class DomainNameManager
 {
-    /**
-     * @var PDO
-     */
-    private $pdo;
+    public function __construct(
+        private readonly PDO $pdo
+    ) {}
 
-    public function __construct(PDO $pdo)
+    public function create($domainName): string|false
     {
-        $this->pdo = $pdo;
-    }
-
-    public function create($domainName)
-    {
-        $sql = "INSERT INTO DomainNames (domainName) VALUES (:domainName)";
+        $sql = 'INSERT INTO DomainNames (domainName) VALUES (:domainName)';
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':domainName', $domainName);
         $stmt->execute();
@@ -28,7 +23,7 @@ class DomainNameManager
 
     public function read($domainId)
     {
-        $sql = "SELECT * FROM DomainNames WHERE domainId = :domainId";
+        $sql = 'SELECT * FROM DomainNames WHERE domainId = :domainId';
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':domainId', $domainId);
         $stmt->execute();
@@ -37,7 +32,7 @@ class DomainNameManager
 
     public function update($domainId, $domainName)
     {
-        $sql = "UPDATE DomainNames SET domainName = :domainName WHERE domainId = :domainId";
+        $sql = 'UPDATE DomainNames SET domainName = :domainName WHERE domainId = :domainId';
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':domainId', $domainId);
         $stmt->bindParam(':domainName', $domainName);
@@ -46,7 +41,7 @@ class DomainNameManager
 
     public function delete($domainId)
     {
-        $sql = "DELETE FROM DomainNames WHERE domainId = :domainId";
+        $sql = 'DELETE FROM DomainNames WHERE domainId = :domainId';
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':domainId', $domainId);
         return $stmt->execute();

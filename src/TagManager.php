@@ -1,45 +1,44 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LinkSavvy;
 
-use Exception;
 use PDO;
 
 class TagManager
 {
-    /**
-     * @var PDO
-     */
-    private $pdo;
+    public function __construct(
+        private readonly PDO $pdo
+    ) {}
 
-    public function __construct(PDO $pdo)
+    public function create(int $tagUserId, string $tagName): string|false
     {
-        $this->pdo = $pdo;
-    }
-
-    public function create(int $tagUserId, string $tagName)
-    {
-        $sql = "INSERT INTO Tags (tagUserId, tagName) VALUES (:tagUserId, :tagName)";
+        $sql = 'INSERT INTO Tags (tagUserId, tagName) VALUES (:tagUserId, :tagName)';
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
             ':tagUserId' => $tagUserId,
-            ':tagName' => $tagName
+            ':tagName' => $tagName,
         ]);
         return $this->pdo->lastInsertId();
     }
 
     public function delete(int $tagId)
     {
-        $sql = "DELETE FROM Tags WHERE tagId = :tagId";
+        $sql = 'DELETE FROM Tags WHERE tagId = :tagId';
         $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute([':tagId' => $tagId]);
+        return $stmt->execute([
+            ':tagId' => $tagId,
+        ]);
     }
 
     public function read(int $tagId)
     {
-        $sql = "SELECT * FROM Tags WHERE tagId = :tagId";
+        $sql = 'SELECT * FROM Tags WHERE tagId = :tagId';
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':tagId' => $tagId]);
+        $stmt->execute([
+            ':tagId' => $tagId,
+        ]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
@@ -57,17 +56,19 @@ class TagManager
                 tagName
             SQL;
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute([':tagUserId' => $tagUserId]);
+        $stmt->execute([
+            ':tagUserId' => $tagUserId,
+        ]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function update(int $tagId, string $tagName)
     {
-        $sql = "UPDATE Tags SET tagName = :tagName WHERE tagId = :tagId";
+        $sql = 'UPDATE Tags SET tagName = :tagName WHERE tagId = :tagId';
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([
             ':tagName' => $tagName,
-            ':tagId' => $tagId
+            ':tagId' => $tagId,
         ]);
     }
 }
