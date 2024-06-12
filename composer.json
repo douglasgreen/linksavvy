@@ -3,9 +3,6 @@
     "description": "A bookmark manager",
     "license": "MIT",
     "autoload": {
-        "files": [
-            "src/Exceptions.php"
-        ],
         "psr-4": {
             "DouglasGreen\\LinkSavvy\\": "src/"
         }
