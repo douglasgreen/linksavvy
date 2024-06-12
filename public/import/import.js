@@ -15,14 +15,14 @@ $(document).ready(function () {
             data: formData,
             processData: false,
             contentType: false,
-            success: function(response) {
+            success: function (response) {
                 loadFolders();
                 form[0].reset();
                 $('#folderId').val('');
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                handleError(jqXHR, textStatus, errorThrown, "Error while saving the folder.");
-            }
+                handleError(jqXHR, textStatus, errorThrown, 'Error while saving the folder.');
+            },
         });
     });
 
@@ -33,14 +33,14 @@ $(document).ready(function () {
                 url: 'delete.php',
                 method: 'POST',
                 data: { folderId: folderId },
-                success: function(response) {
+                success: function (response) {
                     loadFolders();
                     form[0].reset();
                     $('#folderId').val('');
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    handleError(jqXHR, textStatus, errorThrown, "Error while deleting the folder.");
-                }
+                    handleError(jqXHR, textStatus, errorThrown, 'Error while deleting the folder.');
+                },
             });
         }
     });
@@ -49,16 +49,21 @@ $(document).ready(function () {
         $.ajax({
             url: '../folders/read.php',
             method: 'GET',
-            success: function(folders) {
+            success: function (folders) {
                 var html = '';
                 folders.forEach(function (folder) {
-                    html += '<div onclick="loadFolder(' + folder.folderId + ')">' + folder.folderName + '</div>';
+                    html +=
+                        '<div onclick="loadFolder(' +
+                        folder.folderId +
+                        ')">' +
+                        folder.folderName +
+                        '</div>';
                 });
                 foldersList.html(html);
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                handleError(jqXHR, textStatus, errorThrown, "Error while loading folders.");
-            }
+                handleError(jqXHR, textStatus, errorThrown, 'Error while loading folders.');
+            },
         });
     }
 
@@ -69,15 +74,14 @@ $(document).ready(function () {
             url: 'read.php',
             method: 'GET',
             data: { folderId: folderId },
-            success: function(folder) {
+            success: function (folder) {
                 $('#folderId').val(folder.folderId);
                 $('#userId').val(folder.userId);
                 $('#folderName').val(folder.folderName);
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                handleError(jqXHR, textStatus, errorThrown, "Error while loading the folder.");
-            }
+                handleError(jqXHR, textStatus, errorThrown, 'Error while loading the folder.');
+            },
         });
-    }
+    };
 });
-

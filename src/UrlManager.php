@@ -89,8 +89,13 @@ class UrlManager
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function update(int $urlId, string $originalUrl, string $urlTitle, string $urlDescription, int $domainId)
-    {
+    public function update(
+        int $urlId,
+        string $originalUrl,
+        string $urlTitle,
+        string $urlDescription,
+        int $domainId
+    ) {
         $sql = <<<SQL
             UPDATE
                 Urls

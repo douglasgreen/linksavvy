@@ -15,14 +15,14 @@ $(document).ready(function () {
             data: formData,
             processData: false,
             contentType: false,
-            success: function(response) {
+            success: function (response) {
                 loadTags();
                 form[0].reset();
                 $('#tagId').val('');
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                handleError(jqXHR, textStatus, errorThrown, "Error while saving the tag.");
-            }
+                handleError(jqXHR, textStatus, errorThrown, 'Error while saving the tag.');
+            },
         });
     });
 
@@ -33,14 +33,14 @@ $(document).ready(function () {
                 url: 'delete.php',
                 method: 'POST',
                 data: { tagId: tagId },
-                success: function(response) {
+                success: function (response) {
                     loadTags();
                     form[0].reset();
                     $('#tagId').val('');
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    handleError(jqXHR, textStatus, errorThrown, "Error while deleting the tag.");
-                }
+                    handleError(jqXHR, textStatus, errorThrown, 'Error while deleting the tag.');
+                },
             });
         }
     });
@@ -49,7 +49,7 @@ $(document).ready(function () {
         $.ajax({
             url: '../tags/read.php',
             method: 'GET',
-            success: function(tags) {
+            success: function (tags) {
                 var html = '';
                 tags.forEach(function (tag) {
                     html += '<div onclick="loadTag(' + tag.tagId + ')">' + tag.tagName + '</div>';
@@ -57,8 +57,8 @@ $(document).ready(function () {
                 tagsList.html(html);
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                handleError(jqXHR, textStatus, errorThrown, "Error while loading tags.");
-            }
+                handleError(jqXHR, textStatus, errorThrown, 'Error while loading tags.');
+            },
         });
     }
 
@@ -69,15 +69,14 @@ $(document).ready(function () {
             url: 'read.php',
             method: 'GET',
             data: { tagId: tagId },
-            success: function(tag) {
+            success: function (tag) {
                 $('#tagId').val(tag.tagId);
                 $('#userId').val(tag.userId);
                 $('#tagName').val(tag.tagName);
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                handleError(jqXHR, textStatus, errorThrown, "Error while loading the tag.");
-            }
+                handleError(jqXHR, textStatus, errorThrown, 'Error while loading the tag.');
+            },
         });
-    }
+    };
 });
-

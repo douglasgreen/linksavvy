@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 use LinkSavvy\Application;
@@ -27,11 +29,14 @@ try {
         $response['status'] = 'success';
         $response['tagId'] = $tagId;
     } else {
-        throw new Exception("The tagName field is required.");
+        throw new Exception('The tagName field is required.');
     }
 
     echo json_encode($response);
-} catch (Exception $e) {
+} catch (Exception $exception) {
     http_response_code(400); // return a custom status code
-    echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+    echo json_encode([
+        'status' => 'error',
+        'message' => $exception->getMessage(),
+    ]);
 }
