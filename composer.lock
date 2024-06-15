@@ -150,12 +150,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/douglasgreen/config-setup.git",
-                "reference": "7d729b0dd224b1e8f7fe484fa5a3ba383be219ce"
+                "reference": "2e9791dc3e91485795061e23ca2de64aa35bb20c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/douglasgreen/config-setup/zipball/7d729b0dd224b1e8f7fe484fa5a3ba383be219ce",
-                "reference": "7d729b0dd224b1e8f7fe484fa5a3ba383be219ce",
+                "url": "https://api.github.com/repos/douglasgreen/config-setup/zipball/2e9791dc3e91485795061e23ca2de64aa35bb20c",
+                "reference": "2e9791dc3e91485795061e23ca2de64aa35bb20c",
                 "shasum": ""
             },
             "require": {
@@ -220,7 +220,7 @@
                 "source": "https://github.com/douglasgreen/config-setup/tree/main",
                 "issues": "https://github.com/douglasgreen/config-setup/issues"
             },
-            "time": "2024-06-12T22:16:44+00:00"
+            "time": "2024-06-15T14:29:41+00:00"
         },
         {
             "name": "pdepend/pdepend",
